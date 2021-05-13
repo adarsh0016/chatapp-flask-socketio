@@ -13,8 +13,6 @@ from models import *
 app = Flask(__name__)
 app.secret_key = "scerte"
 
-ROOMS = []
-
 #configure database
 app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4"
 db = SQLAlchemy(app)
@@ -25,6 +23,8 @@ socketio = SocketIO(app)
 # configure flask login
 login = LoginManager(app)
 login.init_app(app)
+
+ROOMS = []
 
 @login.user_loader
 def load_user(id):
@@ -96,11 +96,17 @@ def chat():
     #if not current_user.is_authenticated:
     #    flash('Please login.', 'danger')
     #    return redirect(url_for('login'))
+    
+    #getting all the rooms this user is in
+    user_rooms = Rooms.query.filter_by(username = current_user.username).all()
+    user_rooms_list = []
+    for user_room in user_rooms:
+        user_rooms_list.append(user_room.room)
 
-    return render_template('chat.html', username=current_user.username, room_name=room_name)
+    return render_template('chat.html', username=current_user.username, room_name=room_name, user_rooms_list=user_rooms_list)
 
 @app.route("/leave", methods=['GET'])
-def leave_room():
+def leave_room__():
     flash("Join another room.", 'success')
     return redirect(url_for('create_room'))
 
@@ -120,6 +126,12 @@ def message(data):
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
+
+    #Adding the room name the user connected to, to the database.
+    room = Rooms(username = data['username'], room = data['room'], userroom = (data['username']+data['room']))
+    db.session.add(room)
+    db.session.commit()
+
     send({'msg': data['username'] + " has joined the '" + data['room'] + "' room."}, room=data['room'])
 
 @socketio.on('leave')
@@ -135,3 +147,5 @@ if __name__ == "__main__":
 
 
     ## https://www.youtube.com/watch?v=7EeAZx78P2U
+
+    # joining and leaving message not showing every time.

@@ -12,10 +12,15 @@
         <div id="main-section">
             <!--room selection-->
             <nav id="sidebar">
-                <h4 class="select-room">{{ room_name }}</h4>
+                <h4>Rooms:</h4>
+                <h5 class="select-room">{{ room_name }}</h5>
+                {% for i in user_rooms_list %}
+                    <h5 class="select-room">{{ i }}</h5>
+                {% endfor %}
+                <a id="create_room" href={{url_for('create_room')}}">Join new room</a>
             </nav>
             <div id="leave_section">
-                <a id="leave_button" href={{ url_for('leave_room') }}>Leave room</a>
+                <a id="leave_button" href={{ url_for('leave_room__') }}>Leave room</a>
             </div>
 
             <!--message are-->
@@ -38,6 +43,7 @@
         <script type="text/javascript">
             const username = `{{ username }}`;
             const room_name = `{{ room_name }}`;
+            const user_rooms_list = `{{ user_rooms_list }}`
         </script>
 
         <!--custom js-->

@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-    let room = room_name;
-    joinRoom(room_name);
+    room = room_name;
+    joinRoom(room);
 
     // displays incomming messages
     socket.on('message', data => {
@@ -29,6 +29,18 @@ document.addEventListener('DOMContentLoaded', () => {
         //clear input box
         document.querySelector('#user_message').value = '';
     }
+
+        //Room selesction
+        document.querySelectorAll('.select-room').forEach(p => {
+            p.onclick = () => {
+                let newRoom = p.innerHTML;
+                if (newRoom != room) {
+                    leaveRoom(room);
+                    joinRoom(newRoom);
+                    room = newRoom;
+                }
+            };
+        });
 
     //Leave room button
     document.querySelector('#leave_button').onclick = () => {
