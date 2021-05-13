@@ -7,7 +7,7 @@
 {% block content %}
     <h1>Get Started</h1>
 
-    <form action="{{ url_for('index') }}", method="POST">
+    <form action="{{ url_for('signin') }}", method="POST">
 
         {{ displayField(form.username, 'Username', autocomplete="off", autofocus=true) }}
         {{ displayField(form.password, 'Password') }}
@@ -19,4 +19,9 @@
 
         {{ form.csrf_token }}
     </form>
+
+    <hr>
+
+    <p>Already Registered? <a href={{url_for('login')}}>Login here</a>.</p>
+
 {% endblock %}

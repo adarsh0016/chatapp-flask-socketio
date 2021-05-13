@@ -12,10 +12,7 @@
         <div id="main-section">
             <!--room selection-->
             <nav id="sidebar">
-                <h4>ROOMS</h4>
-                {% for room in rooms %}
-                    <p class="select-room">{{ room|title }}</p>
-                {% endfor %}
+                <h4 class="select-room">{{ room_name }}</h4>
             </nav>
 
             <!--message are-->
@@ -34,9 +31,10 @@
 
         </div>
 
-        <!-- get username-->
+        <!-- get username ans room_name-->
         <script type="text/javascript">
             const username = `{{ username }}`;
+            const room_name = `{{ room_name }}`;
         </script>
 
         <!--custom js-->

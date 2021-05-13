@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-    let room = "Lounge";
-    joinRoom("Lounge");
+    let room = room_name;
+    joinRoom(room_name);
 
     // displays incomming messages
     socket.on('message', data => {
@@ -30,20 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#user_message').value = '';
     }
 
-    //Room selesction
-    document.querySelectorAll('.select-room').forEach(p => {
-        p.onclick = () => {
-            let newRoom = p.innerHTML;
-            if (newRoom == room) {
-                msg = `You are already in ${room} room.`
-                printSysMsg(msg);
-            } else {
-                leaveRoom(room);
-                joinRoom(newRoom);
-                room = newRoom;
-            }
-        };
-    });
 
     //Leave room
     function leaveRoom(room){
