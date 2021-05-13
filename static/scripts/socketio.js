@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('#user_message').value = '';
     }
 
+    //Leave room button
+    document.querySelector('#leave_button').onclick = () => {
+        leaveRoom(room_name)
+    }
+
 
     //Leave room
     function leaveRoom(room){

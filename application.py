@@ -73,7 +73,7 @@ def login():
 def create_room():
     global room_name
     if request.method == 'POST':
-        if (request.form['Room_name']):
+        if (request.form.get('Room_name', False)):
             room_name = request.form['Room_name']
             if room_name not in ROOMS:
                 ROOMS.append(room_name)
@@ -81,7 +81,7 @@ def create_room():
             else:
                 flash('Room Already Exists!, try another name.', 'danger')
                 return redirect(url_for('create_room'))
-        elif (request.form['join_room_name']):
+        elif (request.form.get('join_room_name', False)):
             room_name = request.form['join_room_name']
             if room_name in ROOMS:
                 return redirect(url_for('chat'))
@@ -99,6 +99,11 @@ def chat():
 
     return render_template('chat.html', username=current_user.username, room_name=room_name)
 
+@app.route("/leave", methods=['GET'])
+def leave_room():
+    flash("Join another room.", 'success')
+    return redirect(url_for('create_room'))
+
 @app.route("/logout", methods=['GET'])
 def logout():
     logout_user()
@@ -115,12 +120,12 @@ def message(data):
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
-    send({'msg': data['username'] + " has joined the " + data['room'] + " room."}, room=data['room'])
+    send({'msg': data['username'] + " has joined the '" + data['room'] + "' room."}, room=data['room'])
 
 @socketio.on('leave')
 def leave(data):
-    leave_room(data['room'])
     send({'msg': data['username'] + " has left the " + data['room'] + " room."}, room=data['room'])
+    leave_room(data['room'])
 
 
 if __name__ == "__main__":
