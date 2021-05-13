@@ -15,6 +15,7 @@ app.secret_key = "scerte"
 
 #configure database
 app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 #initialize Flask-SocketIO
@@ -31,6 +32,24 @@ room_name = ""
 def load_user(id):
 
     return User.query.get(int(id))
+
+@app.route("/", methods=['GET', 'POST'])
+def login():
+
+    login_form = LoginForm()
+
+    # resetting it to "". for better understamding peep chat.
+    room_name = ""
+
+    # Allow login if validation success
+    if login_form.validate_on_submit():
+        user_object = User.query.filter_by(username=login_form.username.data).first()
+        login_user(user_object)
+        return redirect(url_for('chat'))
+
+        return "Not logged in!"
+
+    return render_template("login.html", form=login_form)
 
 @app.route("/signin", methods=['GET', 'POST'])
 def signin():
@@ -55,23 +74,11 @@ def signin():
 
     return render_template("signin.html", form=reg_form)
 
-@app.route("/", methods=['GET', 'POST'])
-def login():
-
-    login_form = LoginForm()
-
-    # Allow login if validation success
-    if login_form.validate_on_submit():
-        user_object = User.query.filter_by(username=login_form.username.data).first()
-        login_user(user_object)
-        return redirect(url_for('chat'))
-
-        return "Not logged in!"
-
-    return render_template("login.html", form=login_form)
-
 @app.route("/create_room", methods=['GET', 'POST'])
 def create_room():
+    if not current_user.is_authenticated:
+        flash('Please login.', 'danger')
+        return redirect(url_for('login'))
     global room_name
     if request.method == 'POST':
         if (request.form.get('Room_name', False)):
@@ -94,13 +101,15 @@ def create_room():
 
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
-    #if not current_user.is_authenticated:
-    #    flash('Please login.', 'danger')
-    #    return redirect(url_for('login'))
+    if not current_user.is_authenticated:
+        flash('Please login.', 'danger')
+        return redirect(url_for('login'))
     
-    #getting all the rooms this user is in
+    #getting all the rooms this user is in from the database.
     user_rooms = Rooms.query.filter_by(username = current_user.username).all()
     user_rooms_list = []
+
+    # creating a list of user_rooms to send to the client.
     for user_room in user_rooms:
         user_rooms_list.append(user_room.room)
     if room_name not in user_rooms_list:
@@ -135,8 +144,11 @@ def join(data):
 
     #Adding the room name the user connected to, to the database.
     room = Rooms(username = data['username'], room = data['room'], userroom = (data['username']+data['room']))
-    db.session.add(room)
-    db.session.commit()
+    try:
+        db.session.add(room)
+        db.session.commit()
+    except:
+        print("")
 
 @socketio.on('leave')
 def leave(data):
@@ -151,5 +163,3 @@ if __name__ == "__main__":
 
 
     ## https://www.youtube.com/watch?v=7EeAZx78P2U
-
-    # joining and leaving message not showing every time.

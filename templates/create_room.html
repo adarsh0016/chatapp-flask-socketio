@@ -12,7 +12,7 @@
 
       <form action = "{{ url_for('create_room') }}" method = "POST">
          <p>Create Your Own Room:</p>
-         <p><input type = "text" name = "Room_name" placeholder="Enter a name" autocomplete="off" /></p>
+         <p><input type = "text" name = "Room_name" placeholder="Enter a name" autocomplete="off" required="required"/></p>
          <p><input type = "submit" value = "Create" /></p>
       </form>
       <br>
@@ -20,7 +20,7 @@
       <br>
       <form action = "{{ url_for('create_room') }}" method = "POST">
         <p>Join a room:</p>
-        <p><input type = "text" name = "join_room_name" placeholder="Enter the room name" /></p>
+        <p><input type = "text" name = "join_room_name" placeholder="Enter the room name" required="required"/></p>
         <p><input type = "submit" value = "Join" /></p>
      </form>
      <br>
