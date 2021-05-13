@@ -25,7 +25,8 @@ socketio = SocketIO(app)
 login = LoginManager(app)
 login.init_app(app)
 
-ROOMS = []
+ROOMS =[]
+
 room_name = ""
 
 @login.user_loader
@@ -35,11 +36,10 @@ def load_user(id):
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
-
-    login_form = LoginForm()
-
     # resetting it to "". for better understamding peep chat.
     room_name = ""
+
+    login_form = LoginForm()
 
     # Allow login if validation success
     if login_form.validate_on_submit():
@@ -76,6 +76,14 @@ def signin():
 
 @app.route("/create_room", methods=['GET', 'POST'])
 def create_room():
+
+    ROOMS = []
+    get_rooms = Rooms.query.filter_by().all()
+    for i in get_rooms:
+        if i.room not in ROOMS:
+            ROOMS.append(i.room)
+
+
     if not current_user.is_authenticated:
         flash('Please login.', 'danger')
         return redirect(url_for('login'))

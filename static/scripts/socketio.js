@@ -56,6 +56,11 @@ document.addEventListener('DOMContentLoaded', () => {
         leaveRoom(room_name)
     }
 
+    //Logout button
+    document.querySelector('#logout_button').onclick = () => {
+        leaveRoom(room_name)
+    }
+
 
     //Leave room
     function leaveRoom(room){
