@@ -2,7 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     room = room_name;
-    joinRoom(room);
+    if (room_name != "") {
+        joinRoom(room);
+    } else {
+        document.getElementById("user_message").style.visibility="hidden";
+        document.getElementById("send_message").style.visibility="hidden";
+        msg = "Select a room and start chatting!";
+        printSysMsg(msg);
+    }
 
     // displays incomming messages
     socket.on('message', data => {
@@ -33,6 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
         //Room selesction
         document.querySelectorAll('.select-room').forEach(p => {
             p.onclick = () => {
+                document.getElementById("user_message").style.visibility="visible";
+                document.getElementById("send_message").style.visibility="visible";
                 let newRoom = p.innerHTML;
                 if (newRoom != room) {
                     leaveRoom(room);
@@ -42,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
 
-    //Leave room button
-    document.querySelector('#leave_button').onclick = () => {
+    //New room button
+    document.querySelector('#create_room').onclick = () => {
         leaveRoom(room_name)
     }
 

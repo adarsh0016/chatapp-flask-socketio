@@ -25,6 +25,7 @@ login = LoginManager(app)
 login.init_app(app)
 
 ROOMS = []
+room_name = ""
 
 @login.user_loader
 def load_user(id):
@@ -63,7 +64,7 @@ def login():
     if login_form.validate_on_submit():
         user_object = User.query.filter_by(username=login_form.username.data).first()
         login_user(user_object)
-        return redirect(url_for('create_room'))
+        return redirect(url_for('chat'))
 
         return "Not logged in!"
 
@@ -102,8 +103,11 @@ def chat():
     user_rooms_list = []
     for user_room in user_rooms:
         user_rooms_list.append(user_room.room)
+    if room_name not in user_rooms_list:
+        user_rooms_list.append(room_name)
+    user_rooms_list.reverse()
 
-    return render_template('chat.html', username=current_user.username, room_name=room_name, user_rooms_list=user_rooms_list)
+    return render_template('chat.html', username=current_user.username, user_rooms_list=user_rooms_list)
 
 @app.route("/leave", methods=['GET'])
 def leave_room__():
@@ -127,16 +131,16 @@ def message(data):
 def join(data):
     join_room(data['room'])
 
+    send({'msg': data['username'] + " has joined the '" + data['room'] + "' room."}, room=data['room'])
+
     #Adding the room name the user connected to, to the database.
     room = Rooms(username = data['username'], room = data['room'], userroom = (data['username']+data['room']))
     db.session.add(room)
     db.session.commit()
 
-    send({'msg': data['username'] + " has joined the '" + data['room'] + "' room."}, room=data['room'])
-
 @socketio.on('leave')
 def leave(data):
-    send({'msg': data['username'] + " has left the " + data['room'] + " room."}, room=data['room'])
+    send({'msg': data['username'] + " has left the '" + data['room'] + "' room."}, room=data['room'])
     leave_room(data['room'])
 
 

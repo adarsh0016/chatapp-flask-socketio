@@ -13,15 +13,13 @@
             <!--room selection-->
             <nav id="sidebar">
                 <h4>Rooms:</h4>
-                <h5 class="select-room">{{ room_name }}</h5>
                 {% for i in user_rooms_list %}
-                    <h5 class="select-room">{{ i }}</h5>
+                    {% if i != "" %}
+                        <h5 class="select-room">{{ i }}</h5>
+                    {% endif %}
                 {% endfor %}
-                <a id="create_room" href={{url_for('create_room')}}">Join new room</a>
+                <a id="create_room" href={{url_for('create_room')}}>Join new room</a>
             </nav>
-            <div id="leave_section">
-                <a id="leave_button" href={{ url_for('leave_room__') }}>Leave room</a>
-            </div>
 
             <!--message are-->
             <div id="rightside-panel">
@@ -42,7 +40,7 @@
         <!-- get username ans room_name-->
         <script type="text/javascript">
             const username = `{{ username }}`;
-            const room_name = `{{ room_name }}`;
+            const room_name = `{{ user_rooms_list[0] }}`;
             const user_rooms_list = `{{ user_rooms_list }}`
         </script>
 
