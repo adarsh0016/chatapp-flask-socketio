@@ -1,29 +1,38 @@
-<html>
-   <body>
+{% extends 'header.html' %}
+
+{% block title%}Create_room{% endblock %}
+
+{% block content %}
+   <div class="background_create_room">
        <!--Flash message-->
        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-
-                Category: {{ messages[0][0] }}
-                {{ messages[0][1] }}
-
+            <div class="alert alert-warning" role="alert">
+               {{ messages[0][1] }}
+           </div>
             {% endif %}
         {% endwith %}
+      <div class="center_block">
+         <div class="create_room">
+            <form action = "{{ url_for('create_room') }}" method = "POST">
+               <p class="text create_text">Create Your Own Room:</p>
+               <div class="input-group input-group-sm mb-3">
+               <p><input type = "text" name = "Room_name" placeholder="Enter a name" autocomplete="off" required="required" class="form-control create_input"/></p>
+               </div>
+               <p><input type = "submit" value="Create" class="btn btn-outline-light create_button"></p>
+            </form>
+         </div>
 
-      <form action = "{{ url_for('create_room') }}" method = "POST">
-         <p>Create Your Own Room:</p>
-         <p><input type = "text" name = "Room_name" placeholder="Enter a name" autocomplete="off" required="required"/></p>
-         <p><input type = "submit" value = "Create" /></p>
-      </form>
-      <br>
-      <hr>
-      <br>
-      <form action = "{{ url_for('create_room') }}" method = "POST">
-        <p>Join a room:</p>
-        <p><input type = "text" name = "join_room_name" placeholder="Enter the room name" required="required"/></p>
-        <p><input type = "submit" value = "Join" /></p>
-     </form>
-     <br>
-     <a href={{url_for("logout")}}>Logout</a>
-   </body>
-</html>
+     
+         <div class="join_room">
+            <form action = "{{ url_for('create_room') }}" method = "POST">
+               <p class="text join_text">Join a room:</p>
+               <div class="input-group input-group-sm mb-3">
+               <p><input type = "text" name = "join_room_name" placeholder="Enter the room name" required="required" class="form-control join_input"/></p>
+               </div>
+               <p><input type = "submit" value = "Join" class="btn btn-outline-light join_button"></p>
+            </form>
+      </div>
+     </div>
+   </div>
+{% endblock %}

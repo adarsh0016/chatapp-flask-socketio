@@ -64,7 +64,7 @@ body{
     height: 50px;
     margin-left: 0.5em;
     background-color:rgb(226, 109, 80) !important;
-    font-family: montserrat;
+    font-family: 'montserrat';
     
     
 }
@@ -80,7 +80,7 @@ input[type='text'], input[type='password'] {
 }
 
 .bottom_msg{
-    font-family: montserrat;
+    font-family: 'montserrat';
     font-size: small;
 }
 

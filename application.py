@@ -103,7 +103,7 @@ def create_room():
                 flash('No such room exists, check the room name before entering again!','danger')
                 return redirect(url_for('create_room'))
 
-    return render_template('create_room.html')
+    return render_template('create_room.html', username=current_user.username)
 
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
