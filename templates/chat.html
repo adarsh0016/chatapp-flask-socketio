@@ -1,25 +1,22 @@
-<html>
-    <head>
-        <title>
-        </title>
-    </head>
-    <body>
-        <!--navigation section-->
-        <nav>
+{% extends 'header.html' %}
 
-        </nav>
+{% block title%}Chat{% endblock %}
+
+{% block content %}
 
         <div id="main-section">
             <!--room selection-->
             <nav id="sidebar">
-                <h4>Rooms:</h4>
+                <h4 class="rooms_text">Rooms</h4>
                 {% for i in user_rooms_list %}
                     {% if i != "" %}
                         <h5 class="select-room">{{ i }}</h5>
+                        <hr color="white">
                     {% endif %}
                 {% endfor %}
-                <a id="create_room" href={{url_for('create_room')}}>Join new room</a>
             </nav>
+
+            <a id="create_room" href={{url_for('create_room')}} class="join_room_button"><img class="join_room_icon" src="static\images\person-plus-fill.svg" alt="Join Room"></a>
 
             <!--message are-->
             <div id="rightside-panel">
@@ -28,18 +25,14 @@
 
                 </div>
                 <!--input message-->
-                <div id="input-area">
-                    <input type="text" id="user_message" placeholder="Type here.." autocomplete="off">
-                    <button type="button" id="send_message">SEND</button>
+                <div id="user_message" class="input-group mb-3">
+                    <input type="text" id="user_message" placeholder="Type here.." autocomplete="off" class="form-control">
+                    <button type="button" id="send_message" class="btn btn-outline-secondary">SEND</button>
                 </div>
 
             </div>
 
         </div>
-
-        <br>
-        <a id="#logout_button" href={{url_for("logout")}}>Logout</a>
-
         <!-- get username ans room_name-->
         <script type="text/javascript">
             const username = `{{ username }}`;
@@ -57,5 +50,4 @@
          <script src="{{ url_for('static', filename='scripts/socketio.js') }}"></script>
 
         
-    </body>
-</html>
+{% endblock %}

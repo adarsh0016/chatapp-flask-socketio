@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;1,400&display=swap');
 
+
 .background_create_room{
     margin: 0;
     height: 100%;
     width: 100%;
-    background-color: #1d2229;
     font-family: 'montserrat';
 }
 
@@ -12,6 +12,7 @@
     position: absolute;
     margin-left: 15%;
     width: 74%;
+    text-align: center;
 }
 
 .center_block{
@@ -20,9 +21,8 @@
     margin-top: 5%;
     width: 80%;
     height: 80%;
-    background-color: #262d35;
+    background-color: rgb(38, 45, 53, 0.85);
     border-radius: 15px 15px 15px 15px;
-
 }
 
 .create_room{
@@ -47,6 +47,8 @@
 .text{
     font-size: 150%;
     margin-bottom: 4.5em;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
 .btn-outline-light{
