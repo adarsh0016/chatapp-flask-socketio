@@ -36,8 +36,6 @@ def load_user(id):
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
-    # resetting it to "". for better understamding peep chat.
-    room_name = ""
 
     login_form = LoginForm()
 
@@ -133,6 +131,11 @@ def leave_room__():
 
 @app.route("/logout", methods=['GET'])
 def logout():
+    global room_name
+
+    # resetting it to "". for better understamding peep chat.
+    room_name=""
+
     logout_user()
     flash('You have logged out successfully', 'success')
     return redirect(url_for('login'))

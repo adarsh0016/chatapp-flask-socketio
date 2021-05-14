@@ -4,25 +4,25 @@
 {% block title%}Login {% endblock %}
 
 {% block content %}
-    <h2>Login now!</h2>
-    <p>Enter your username/password to start zchats</p>
+    <div class="form">
+        <h2 class="heading">Log In</h2>
 
-    <form action="{{url_for('login')}}" method="POST">
-        {{ displayField(form.username, 'Username', autocomplete="off", autofocus=true) }}
-        {{ displayField(form.password, 'Password') }}
+        <form action="{{url_for('login')}}" method="POST">
+            {{ displayField(form.username, 'Username', autocomplete="off", autofocus=true) }}
+            {{ displayField(form.password, 'Password') }}
 
-        <div>
-            {{ form.submit_button }}
-        </div>
+            <div class="form-group">
+                <input type="submit" value="Login" class="btn btn-secondary">
+            </div>
 
-        {{ form.csrf_token }}
+            {{ form.csrf_token }}
 
-    </form>
+        </form>
 
 
-    <hr>
+        <hr class="hr">
 
-    <p>Not Registered? <a href={{url_for('signin')}}>Signup here</a>.</p>
-
+        <p class="bottom_msg">Not Registered? <a href={{url_for('signin')}} class="link">Signup here</a>.</p>
+    </div>
 
 {% endblock %}
