@@ -3,16 +3,145 @@
     margin-left: 85%;
     padding-left: 2em;
     padding-right: 2em;
+    margin-top: 6em;
     width: 15%;
-    height: 100%;
-    background-color: black;
+    height: 87%;
+    background-color: rgba(51, 51, 51, 0.3);
     color: white;
+    overflow-y: auto; /*Make  this section scrolable */
 
 }
 
+.sidebar_with_tilte{
+    position: absolute;
+    background-color: white;
+    width: 0.05em;
+    height: 100%;
+    margin-left: 84.9%;
+}
+
 .rooms_text{
-    margin-top: 20%;
-    margin-bottom: 40%;
+    color: white;
+    font-family: montserrat;
+    position: absolute;
+    right: 2.5em;
+    top: 0.7em;
+    background-color: tomato;
+    padding-left: 0.7em;
+    padding-right: 0.7em;
+    padding: 0.5em;
+    border-radius: 30px;
+
+}
+
+.select-room{
+    font-size: medium;
+}
+
+.select-room:hover{
+    background-color: rgb(255, 99, 71, 0.5) !important;
+    text-align: center !important;
+    padding: 0.5em !important;
+    border-radius: 20px !important;
+    cursor: pointer !important;
+}
+
+.form-rounded {
+    position: absolute;
+    border-radius: 1rem !important;
+    width: 70% !important;
+    margin-left: 7%;
+    bottom: 1rem;
+}
+
+.btn-circle {
+    background-color: tomato !important;
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    line-height: 45px;
+    text-align: center;
+    padding: 0;
+    border-radius: 50% !important;
+    bottom: 0.6rem;
+    right: 18%;
+  }
+
+.fa-arrow-right{
+    color: white;
+}
+
+#rightside-pannel {
+    overflow: hidden; /* Make this div take up the rest of the horizontal space, and no more */
+}
+
+.main-chat-section{
+    background-image: url("../images/back.png");
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+#display-message-section {
+    padding-top: 2em;
+    min-height: 90vh;
+    max-height: 90vh;
+    overflow-y: auto; /*Make  this section scrolable */
+}
+
+.others-msg {
+    margin-left: 8%;
+    max-width: 25em;
+    padding: 0.5em 0.5em 0.5em 1em;
+    border-radius: 0px 15px 15px 15px;
+    background-color: #292828;
+    color: white;
+    font-family: montserrat;
+    border-color: rgb(255, 255, 255);
+    border-width: 0.5px;
+    border-style: solid;
+}
+
+.my-msg {
+    margin-left: 55%;
+    max-width: 25em;
+    padding: 0.5em 0.5em 0.5em 1em;
+    border-radius: 15px 15px 0px 15px;
+    background-color: #414141;
+    color: white;
+    font-family: montserrat;
+    border-color: rgb(255, 255, 255);
+    border-width: 0.5px;
+    border-style: solid;
+}
+
+.system-msg {
+    color: black;
+    font-size:0.9em;
+    text-align: center;
+    margin-left: 32%;
+    max-width: 30%;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.timestamp {
+    color: #898d92;
+    font-size:0.7em;
+}
+
+.other-username {
+    font-weight: bold;
+    font-size: 1.1em;
+    font-family: montserrat;
+    color: #00b7ff;
+}
+
+.my-username {
+    font-weight: bold;
+    font-size: 1.1em;
+    font-family: montserrat;
+    color: #ffc400;
 }
 
 .join_room_icon{
@@ -23,7 +152,40 @@
     margin-top: 6em;
 }
 
-.input-group{
-    margin-left: 20%;
-    margin-top: 30%;
+/*custom scrollbar*/
+#sidebar::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
 }
+
+#sidebar::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: #F5F5F5;
+}
+
+#sidebar::-webkit-scrollbar-thumb
+{
+	background-color: rgb(255, 94, 0);	
+	background-image: -webkit-linear-gradient(45deg,
+	                                          rgba(255, 255, 255, .2) 25%,
+											  transparent 25%,
+											  transparent 50%,
+											  rgba(255, 255, 255, .2) 50%,
+											  rgba(255, 255, 255, .2) 75%,
+											  transparent 75%,
+											  transparent)
+}
+
+/* hiding scrollbar in chrome */
+#display-message-section::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+#display-message-section {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

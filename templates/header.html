@@ -6,15 +6,26 @@
         <link rel="stylesheet" type="text/css" href="static\styles\header.css">
         <link rel="stylesheet" type="text/css" href="static\styles\create_room.css">
         <link rel="stylesheet" type="text/css" href="static\styles\chat.css">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <script src="https://kit.fontawesome.com/53136ede93.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!--custom js-->
+        <script src="{{ url_for('static', filename='scripts/chat_page.js') }}"></script>        
+
+        <!-- SocketIO JS -->
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
+        <!-- Custom SocketIO JS -->
+        <script src="{{ url_for('static', filename='scripts/socketio.js') }}"></script>
+
     </head>
     <body>
         <div class="background">
             <nav class="navbar_left">
                 <img src="static\images\person.svg" class="user">
                 <p class="user_name" >{{ username }}</p>
-                <a class="logout" href={{url_for("logout")}}><img class="logout_icon" src="static\images\box-arrow-right.svg"></a>
+                <a class="logout" id="logout_button" href={{url_for("logout")}}><img class="logout_icon" src="static\images\box-arrow-right.svg"></a>
             </nav>
             <div>
                 {% block content %}

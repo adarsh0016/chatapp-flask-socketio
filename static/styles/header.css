@@ -3,6 +3,11 @@ body{
     margin:0;
 }
 
+.background{
+    background-image: url("../images/back.png");
+    background-size:cover
+}
+
 .navbar_left{
     background-color: rgb(223, 66, 26);
     position: absolute;
@@ -10,7 +15,7 @@ body{
     top: 1%;
     left: 0.5%;
     width: 3.5%;
-    border-radius: 15px 15px 15px 15px;
+    border-radius: 23px;
 }
 
 .user{
