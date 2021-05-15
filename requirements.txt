@@ -2,7 +2,7 @@ bidict==0.21.2
 cffi==1.14.5
 click==8.0.0
 colorama==0.4.4
-dnspython==2.1.0
+dnspython==1.16.0
 eventlet==0.31.0
 Flask==2.0.0
 Flask-Login==0.5.0
