@@ -20,7 +20,6 @@ db = SQLAlchemy(app)
 
 #initialize Flask-SocketIO
 socketio = SocketIO(app)
-socketio.init_app(app, cors_allowed_origins="*")
 
 # configure flask login
 login = LoginManager(app)
