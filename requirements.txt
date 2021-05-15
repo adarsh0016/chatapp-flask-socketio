@@ -2,11 +2,11 @@ bidict==0.21.2
 cffi==1.14.5
 click==8.0.0
 colorama==0.4.4
-dnspython==1.16.0
+dnspython==2.1.0
 eventlet==0.31.0
 Flask==2.0.0
 Flask-Login==0.5.0
-Flask-SocketIO==4.3.1
+Flask-SocketIO==5.0.3
 Flask-SQLAlchemy==2.5.1
 Flask-WTF==0.14.3
 gevent==21.1.2
@@ -19,8 +19,8 @@ MarkupSafe==2.0.0
 passlib==1.7.4
 psycopg2==2.8.6
 pycparser==2.20
-python-engineio==3.13.2
-python-socketio==4.6.0
+python-engineio==4.2.0
+python-socketio==5.3.0
 six==1.16.0
 SQLAlchemy==1.4.15
 Werkzeug==2.0.0
