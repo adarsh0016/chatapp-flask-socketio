@@ -154,7 +154,7 @@ def join(data):
 
     #Adding the room name the user connected to, to the database.
     room = Rooms(username = data['username'], room = data['room'], userroom = (data['username']+data['room']))
-    if Rooms.query.filter_by(userroom=(data['username']+data['room'])) is None:
+    if Rooms.query.filter_by(userroom=(data['username']+data['room'])).first() is None:
         db.session.add(room)
         db.session.commit()
 
