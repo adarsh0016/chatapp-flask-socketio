@@ -4,6 +4,7 @@ from time import localtime, strftime
 from flask import Flask, render_template,url_for,redirect, flash, request
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from flask_socketio import SocketIO, rooms, send, emit, join_room, leave_room
+from werkzeug import debug
 
 from wtform_fields import *
 
@@ -11,10 +12,15 @@ from models import *
 
 # configure app
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET')
+
+app.secret_key = os.environ.get('SECRET') # for heroku server
+#app.secret_key = 'SECRET' # for local server
 
 #configure database
-app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE')
+
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
+#app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -36,6 +42,10 @@ def load_user(id):
 
 @app.route("/", methods=['GET', 'POST'])
 def login():
+    global room_name
+
+    # resetting room_name to none for new users
+    room_name = ""
 
     login_form = LoginForm()
 
@@ -66,6 +76,7 @@ def signin():
         user = User(username=username, password=hashed_pswd)
         db.session.add(user)
         db.session.commit()
+        db.session.close()
 
         flash('Registered succesfully. Please login.', 'success')
         return redirect(url_for('login'))
@@ -157,6 +168,7 @@ def join(data):
     if Rooms.query.filter_by(userroom=(data['username']+data['room'])).first() is None:
         db.session.add(room)
         db.session.commit()
+        db.session.close()
 
 @socketio.on('leave')
 def leave(data):
@@ -166,7 +178,8 @@ def leave(data):
 
 if __name__ == "__main__":
 
-    app.run(debug=True)
+    app.run(debug=True) # for heroku server
+    #socketio.run(app, debug=True)
 
 
 
