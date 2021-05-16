@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
    
     // send message
     document.querySelector('#send_message').onclick = () =>{
-        await socket.send({'msg': document.querySelector('#user_message').value, 'username': username, 'room': room });
+        socket.send({'msg': document.querySelector('#user_message').value, 'username': username, 'room': room });
         //clear input box
         document.querySelector('#user_message').value = '';
     };
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Leave room
     function leaveRoom(room){
-        await socket.emit('leave', {'username': username, 'room': room});
+        socket.emit('leave', {'username': username, 'room': room});
 
         //non-highlighting the room name
         document.querySelectorAll('.select-room').forEach(p => {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //joinroom
     function joinRoom(room){
-        await socket.emit('join', {'username': username, 'room': room});
+        socket.emit('join', {'username': username, 'room': room});
 
         // Highlight selected room
         document.querySelector('#' + CSS.escape(room)).style.backgroundColor = "tomato";
