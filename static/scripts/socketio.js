@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //connect ot socket.io
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
-    console.log(socket)
 
     room = room_name;
     if (room_name != "") {
