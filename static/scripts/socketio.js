@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //connect ot socket.io
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
+    //if there is a room_name (came here from create_room page) it joins the room and if not (came here from login page) makes the input bar invisible.
     room = room_name;
     if (room_name != "") {
         joinRoom(room);
@@ -83,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //Room selesction
         document.querySelectorAll('.select-room').forEach(p => {
             p.onclick = () => {
+                //making the input bar visible.
                 document.getElementById("user_message").style.visibility="visible";
                 document.getElementById("send_message").style.visibility="visible";
                 let newRoom = p.innerHTML;

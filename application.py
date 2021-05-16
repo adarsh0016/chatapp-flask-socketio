@@ -12,7 +12,6 @@ from models import *
 
 # configure app
 app = Flask(__name__)
-
 app.secret_key = os.environ.get('SECRET') # for heroku server
 #app.secret_key = 'SECRET' # for local server
 
@@ -20,7 +19,6 @@ app.secret_key = os.environ.get('SECRET') # for heroku server
 
 app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
 #app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -31,38 +29,38 @@ socketio = SocketIO(app)
 login = LoginManager(app)
 login.init_app(app)
 
-ROOMS =[]
+#Global variables
+ROOMS =[]   #stores the rooms the current client is in.
+room_name = ""  #stores the value to current room of the client.
 
-room_name = ""
-
+#flask login
 @login.user_loader
 def load_user(id):
 
-    return User.query.get(int(id))
+    return User.query.get(int(id))  #returns the username and password of the client from users table.
 
+# login page
 @app.route("/", methods=['GET', 'POST'])
 def login():
     global room_name
 
-    # resetting room_name to none for new users
-    room_name = ""
+    room_name = ""  # resetting room_name to none for new users.
 
-    login_form = LoginForm()
+    login_form = LoginForm()    #flask login
 
     # Allow login if validation success
     if login_form.validate_on_submit():
-        user_object = User.query.filter_by(username=login_form.username.data).first()
-        login_user(user_object)
-        return redirect(url_for('chat'))
+        user_object = User.query.filter_by(username=login_form.username.data).first()   #returns the user_object (ie. id, username, password) of the clinet from the users table.
+        login_user(user_object)     #logins in the session
+        return redirect(url_for('chat'))    #redirecting to the cat page.
 
-        return "Not logged in!"
+    return render_template("login.html", form=login_form)   #renders the login page, passing the login_form values as form variable to html.
 
-    return render_template("login.html", form=login_form)
-
+#signin page
 @app.route("/signin", methods=['GET', 'POST'])
 def signin():
 
-    reg_form = RegistrationForm()
+    reg_form = RegistrationForm()   #flask login
 
     # updated databse if validation success
     if reg_form.validate_on_submit():
@@ -79,45 +77,49 @@ def signin():
         db.session.close()
 
         flash('Registered succesfully. Please login.', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('login'))   #redireting to the login page.
 
-    return render_template("signin.html", form=reg_form)
+    return render_template("signin.html", form=reg_form)    #rendering the signin page.
 
+# Create_room page
 @app.route("/create_room", methods=['GET', 'POST'])
 def create_room():
+    global room_name
 
-    ROOMS = []
-    get_rooms = Rooms.query.filter_by().all()
-    for i in get_rooms:
-        if i.room not in ROOMS:
-            ROOMS.append(i.room)
-
-
+    # checks if the user is logged in and not just added "/create_room" at the end
     if not current_user.is_authenticated:
         flash('Please login.', 'danger')
         return redirect(url_for('login'))
-    global room_name
+
+    ROOMS = []  #initializeing the ROOMS list.
+    get_rooms = Rooms.query.filter_by().all()   #getting all the room objects from rooms table.
+    for i in get_rooms:
+        if i.room not in ROOMS:
+            ROOMS.append(i.room)    #adding all the unique room names to the list to display at the rooms section of the chat page.
+
     if request.method == 'POST':
-        if (request.form.get('Room_name', False)):
-            room_name = request.form['Room_name']
-            if room_name not in ROOMS:
+        if (request.form.get('Room_name', False)):  #if the client has entered something.
+            room_name = request.form['Room_name']   #getting the room entered by the client.
+            if room_name not in ROOMS:  #checks if the room already exists or not.
                 ROOMS.append(room_name)
                 return redirect(url_for('chat'))
-            else:
+            else:   #if the room already exists.
                 flash('Room Already Exists!, try another name.', 'danger')
                 return redirect(url_for('create_room'))
-        elif (request.form.get('join_room_name', False)):
+        elif (request.form.get('join_room_name', False)):   #if the client has entered something.
             room_name = request.form['join_room_name']
-            if room_name in ROOMS:
+            if room_name in ROOMS:  #if room already exists.
                 return redirect(url_for('chat'))
-            else:
+            else:   #if it did'nt.
                 flash('No such room exists, check the room name before entering again!','danger')
                 return redirect(url_for('create_room'))
 
     return render_template('create_room.html', username=current_user.username)
 
+#chat page.
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
+    # checks if the user is logged in and not just added "/chat" at the end
     if not current_user.is_authenticated:
         flash('Please login.', 'danger')
         return redirect(url_for('login'))
@@ -131,15 +133,17 @@ def chat():
         user_rooms_list.append(user_room.room)
     if room_name not in user_rooms_list:
         user_rooms_list.append(room_name)
-    user_rooms_list.reverse()
+    user_rooms_list.reverse()   #reverse it so that the latest room comes in the top.
 
     return render_template('chat.html', username=current_user.username, user_rooms_list=user_rooms_list)
 
+#leave_room page
 @app.route("/leave", methods=['GET'])
 def leave_room__():
     flash("Join another room.", 'success')
     return redirect(url_for('create_room'))
 
+#logout page
 @app.route("/logout", methods=['GET'])
 def logout():
     global room_name
@@ -151,12 +155,13 @@ def logout():
     flash('You have logged out successfully', 'success')
     return redirect(url_for('login'))
 
-#event handler (socketIO)
+#event handler (socketIO): takes the msg and adds time.
 @socketio.on('message')
 def message(data):
 
-    send({'msg': data['msg'], 'username': data['username'], 'time_stamp': strftime('%b-%d %I: %M%p', localtime())}, room =data['room'])
+    send({'msg': data['msg'], 'username': data['username'], 'time_stamp': strftime('%b-%d %I: %M%p', localtime())}, room =data['room']) #msg={'msg':msg,'username':username}
 
+#event handler: join room
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
@@ -170,6 +175,7 @@ def join(data):
         db.session.commit()
         db.session.close()
 
+#event handler: leave room
 @socketio.on('leave')
 def leave(data):
     send({'name': data['username'], 'msg': data['username'] + " has left the '" + data['room'] + "' room."}, room=data['room'])

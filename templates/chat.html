@@ -4,25 +4,25 @@
 
 {% block content %}
 
-        <div id="main-section">
-            <!--room selection-->
-            <div class="sidebar_with_tilte"></div>
-                <h4 class="rooms_text">Rooms</h4>
-                <nav id="sidebar">
-                    {% for i in user_rooms_list %}
-                        {% if i != "" %}
-                            <h5 class="select-room" id="{{i}}">{{ i }}</h5>
-                            <hr color="white">
-                        {% endif %}
-                    {% endfor %}
-                </nav>
+    <div id="main-section">
+        <!--room selection-->
+        <div class="sidebar_with_tilte"></div>
+            <h4 class="rooms_text">Rooms</h4>
+            <nav id="sidebar">
+                {% for i in user_rooms_list %}
+                    {% if i != "" %}
+                        <h5 class="select-room" id="{{i}}">{{ i }}</h5>
+                        <hr color="white">
+                    {% endif %}
+                {% endfor %}
+            </nav>
 
-            <a id="create_room" href={{url_for('create_room')}} class="join_room_button"><img class="join_room_icon" src="static\images\person-plus-fill.svg" alt="Join Room"></a>
+        <a id="create_room" href={{url_for('create_room')}} class="join_room_button"><img class="join_room_icon" src="static\images\person-plus-fill.svg" alt="Join Room"></a>
 
-            <!--message are-->
-            <div id="rightside-panel">
-                <div class="main-chat-section">
-                
+        <!--message are-->
+        <div id="rightside-panel">
+            <div class="main-chat-section">
+            
                 <!--Display message start-->
                 <div id="display-message-section">
 
@@ -34,17 +34,17 @@
                     <input type="text" id="user_message" placeholder="Type here.." autocomplete="off" class="form-control form-rounded" >
                     <button class="btn btn-circle" type="button" id="send_message"><i class="fas fa-arrow-right"></i></button>
                 </div>
-                </div>
-
             </div>
 
         </div>
-        <!-- get username ans room_name-->
-        <script type="text/javascript">
-            const username = `{{ username }}`;
-            const room_name = `{{ user_rooms_list[0] }}`;
-            const user_rooms_list = `{{ user_rooms_list }}`
-        </script>
+
+    </div>
+    <!-- get username ans room_name-->
+    <script type="text/javascript">
+        const username = `{{ username }}`;
+        const room_name = `{{ user_rooms_list[0] }}`;
+        const user_rooms_list = `{{ user_rooms_list }}`
+    </script>
 
         
 {% endblock %}

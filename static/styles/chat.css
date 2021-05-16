@@ -1,3 +1,4 @@
+/* rooms name section */
 #sidebar{
     position: absolute;
     margin-left: 85%;
@@ -12,6 +13,7 @@
 
 }
 
+/* that small verticle line at side of rooms name section */
 .sidebar_with_tilte{
     position: absolute;
     background-color: white;
@@ -20,6 +22,7 @@
     margin-left: 84.9%;
 }
 
+/* "ROOMS" text */
 .rooms_text{
     color: white;
     font-family: montserrat;
@@ -34,10 +37,12 @@
 
 }
 
+/* each room name */
 .select-room{
     font-size: medium;
 }
 
+/* each room text when hovered */
 .select-room:hover{
     background-color: rgb(255, 99, 71, 0.5) !important;
     text-align: center !important;
@@ -46,6 +51,7 @@
     cursor: pointer !important;
 }
 
+/* rounded input box */
 .form-rounded {
     position: absolute;
     border-radius: 1rem !important;
@@ -54,6 +60,7 @@
     bottom: 1rem;
 }
 
+/* send button */
 .btn-circle {
     background-color: tomato !important;
     position: absolute;
@@ -67,14 +74,17 @@
     right: 18%;
   }
 
+/* send button icon */
 .fa-arrow-right{
     color: white;
 }
 
+/* whole section-dont know if its important */
 #rightside-pannel {
     overflow: hidden; /* Make this div take up the rest of the horizontal space, and no more */
 }
 
+/* whole back section */
 .main-chat-section{
     background-image: url("../images/back.png");
     background-size: cover;
@@ -82,6 +92,7 @@
     height: 100%;
 }
 
+/* the area where msg is displayed */
 #display-message-section {
     padding-top: 2em;
     min-height: 90vh;
@@ -144,6 +155,7 @@
     color: #ffc400;
 }
 
+/* join room icon on the navbar */
 .join_room_icon{
     position: absolute;
     filter: invert(84%) sepia(3%) saturate(3092%) hue-rotate(313deg) brightness(102%) contrast(100%);

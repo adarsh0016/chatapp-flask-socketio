@@ -8,6 +8,7 @@
     font-family: 'montserrat';
 }
 
+/* alert msgs */
 .alert{
     position: absolute;
     margin-left: 15%;
@@ -15,6 +16,7 @@
     text-align: center;
 }
 
+/* center area */
 .center_block{
     position: absolute;
     margin-left: 13%;
