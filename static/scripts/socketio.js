@@ -17,7 +17,43 @@ document.addEventListener('DOMContentLoaded', () => {
     // displays incomming messages
     // Display all incoming messages
     socket.on('message', data => {
+        print_msg(data,username);
+    });
 
+   
+    // send message
+    document.querySelector('#send_message').onclick = () =>{
+        socket.send({'msg': document.querySelector('#user_message').value, 'username': username, 'room': room });
+        //clear input box
+        document.querySelector('#user_message').value = '';
+    };
+
+        //Room selesction
+        document.querySelectorAll('.select-room').forEach(p => {
+            p.onclick = () => {
+                //making the input bar visible.
+                document.getElementById("user_message").style.visibility="visible";
+                document.getElementById("send_message").style.visibility="visible";
+                let newRoom = p.innerHTML;
+                if (newRoom != room) {
+                    leaveRoom(room);
+                    joinRoom(newRoom);
+                    room = newRoom;
+                }
+            };
+        });
+
+    //New room button
+    document.querySelector('#create_room').onclick = () => {
+        leaveRoom(room_name)
+    }
+
+    //Logout button
+    document.querySelector('#logout_button').onclick = () => {
+        leaveRoom(room_name)
+    }
+
+    function print_msg(data,username){
         // Display current message
         if (data.msg) {
             const p = document.createElement('p');
@@ -71,40 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         }
         scrollDownChatWindow();
-    });
-
-   
-    // send message
-    document.querySelector('#send_message').onclick = () =>{
-        socket.send({'msg': document.querySelector('#user_message').value, 'username': username, 'room': room });
-        //clear input box
-        document.querySelector('#user_message').value = '';
-    };
-
-        //Room selesction
-        document.querySelectorAll('.select-room').forEach(p => {
-            p.onclick = () => {
-                //making the input bar visible.
-                document.getElementById("user_message").style.visibility="visible";
-                document.getElementById("send_message").style.visibility="visible";
-                let newRoom = p.innerHTML;
-                if (newRoom != room) {
-                    leaveRoom(room);
-                    joinRoom(newRoom);
-                    room = newRoom;
-                }
-            };
-        });
-
-    //New room button
-    document.querySelector('#create_room').onclick = () => {
-        leaveRoom(room_name)
     }
 
-    //Logout button
-    document.querySelector('#logout_button').onclick = () => {
-        leaveRoom(room_name)
-    }
 
 
     //Leave room
@@ -138,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //printing you joined the room
         printSysMsg("You joined the '" + room + "' room.")
     }
-
+        
     // Scroll chat window down
     function scrollDownChatWindow() {
         const chatWindow = document.querySelector("#display-message-section");

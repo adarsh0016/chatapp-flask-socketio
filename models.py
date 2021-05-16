@@ -21,3 +21,13 @@ class Rooms(UserMixin, db.Model):
     username = db.Column(db.String(25), nullable=False)
     room = db.Column(db.String(), nullable=False)
     userroom = db.Column(db.String(), unique=True, nullable=False)
+
+class Msg_history(UserMixin, db.Model):
+    """ msg_history model """
+
+    __tablename__ = "msg_history"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(25), nullable=False)
+    room = db.Column(db.String(), nullable=False)
+    msg = db.Column(db.String(), nullable=False)
+    time = db.Column(db.String(), nullable=False)

@@ -12,13 +12,13 @@ from models import *
 
 # configure app
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET') # for heroku server
-#app.secret_key = 'SECRET' # for local server
+#app.secret_key = os.environ.get('SECRET') # for heroku server
+app.secret_key = 'SECRET' # for local server
 
 #configure database
 
-app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
-#app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
+#app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
+app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -161,6 +161,12 @@ def message(data):
 
     send({'msg': data['msg'], 'username': data['username'], 'time_stamp': strftime('%b-%d %I: %M%p', localtime())}, room =data['room']) #msg={'msg':msg,'username':username}
 
+    #adding msg to history.
+    msg_history = Msg_history(username = data['username'], room = data['room'], msg = data['msg'], time = strftime('%b-%d %I: %M%p', localtime()))
+    db.session.add(msg_history)
+    db.session.commit()
+    db.session.close()
+
 #event handler: join room
 @socketio.on('join')
 def join(data):
@@ -175,6 +181,10 @@ def join(data):
         db.session.commit()
         db.session.close()
 
+    msg_history = Msg_history.query.filter_by(room = data['room']).all()
+    for each_msg in msg_history:
+        send({'msg': each_msg.msg, 'username': each_msg.username, 'time_stamp': each_msg.time}, room = data['room']) #msg={'msg':msg,'username':username}
+
 #event handler: leave room
 @socketio.on('leave')
 def leave(data):
@@ -184,8 +194,8 @@ def leave(data):
 
 if __name__ == "__main__":
 
-    app.run(debug=True) # for heroku server
-    #socketio.run(app, debug=True)
+    #app.run(debug=True) # for heroku server
+    socketio.run(app, debug=True)
 
 
 
