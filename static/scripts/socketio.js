@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         //Room selesction
         document.querySelectorAll('.select-room').forEach(p => {
             p.onclick = () => {
+                // remove the menu
+                document.querySelectorAll(".mobile-hide").forEach(p => {
+                    p.style.display="none";
+                });
+
                 //making the input bar visible.
                 document.getElementById("user_message").style.visibility="visible";
                 document.getElementById("send_message").style.visibility="visible";
@@ -129,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('join', {'username': username, 'room': room});
 
         // Highlight selected room
-        document.querySelector('#' + CSS.escape(room)).style.backgroundColor = "tomato";
+        document.querySelector('#' + CSS.escape(room)).style.backgroundColor = "#0704b1";
         document.querySelector('#' + CSS.escape(room)).style.textAlign = "center";
         document.querySelector('#' + CSS.escape(room)).style.padding = "0.5em";
         document.querySelector('#' + CSS.escape(room)).style.borderRadius = "20px";

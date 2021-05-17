@@ -6,18 +6,19 @@
 
     <div id="main-section">
         <!--room selection-->
-        <div class="sidebar_with_tilte"></div>
+        <div class="top_bar show-mobile"></div>
+        <div id="sidebar" class="mobile-hide">
+            <div class="sidebar_with_tilte"></div>
             <h4 class="rooms_text">Rooms</h4>
-            <nav id="sidebar">
-                {% for i in user_rooms_list %}
-                    {% if i != "" %}
-                        <h5 class="select-room" id="{{i}}">{{ i }}</h5>
-                        <hr color="white">
-                    {% endif %}
-                {% endfor %}
-            </nav>
-
-        <a id="create_room" href={{url_for('create_room')}} class="join_room_button"><img class="join_room_icon" src="static\images\person-plus-fill.svg" alt="Join Room"></a>
+                <nav id="sidebar_rooms">
+                    {% for i in user_rooms_list %}
+                        {% if i != "" %}
+                            <h5 class="select-room" id="{{i}}">{{ i }}</h5>
+                            <hr color="white">
+                        {% endif %}
+                    {% endfor %}
+                </nav>
+        </div>
 
         <!--message are-->
         <div id="rightside-panel">

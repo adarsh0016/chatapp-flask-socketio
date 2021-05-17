@@ -29,10 +29,13 @@
     </head>
     <body>
         <div class="background">
-            <nav class="navbar_left">
-                <img src="static\images\person.svg" class="user">
-                <p class="user_name" >{{ username }}</p>
-                <a class="logout" id="logout_button" href={{url_for("logout")}}><img class="logout_icon" src="static\images\box-arrow-right.svg"></a>
+            <i class="fas fa-bars fa-lg show-mobile" id="ham"></i>
+            <nav class="navbar_left mobile-hide">
+                <i class="fas fa-bars fa-lg show-mobile" id="ham_exit"></i>
+                <img src="static\images\person.svg" class="user mobile-hide">
+                <p class="user_name mobile-hide" >{{ username }}</p>
+                <a id="create_room" href={{url_for('create_room')}} class="join_room_button mobile-hide"><img class="join_room_icon mobile-hide" src="static\images\person-plus-fill.svg" alt="Join Room"></a>
+                <a class="logout mobile-hide" id="logout_button" href={{url_for("logout")}}><img class="logout_icon" src="static\images\box-arrow-right.svg"></a>
             </nav>
             <div>
                 {% block content %}

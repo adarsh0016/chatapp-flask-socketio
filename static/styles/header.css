@@ -9,31 +9,58 @@ body{
 }
 
 .navbar_left{
-    background-color: rgb(223, 66, 26);
     position: absolute;
     height: 98%;
-    top: 1%;
-    left: 0.5%;
+    top: 2%;
+    left: 1%;
     width: 3.5%;
-    border-radius: 23px;
 }
 
 .user{
-    filter: invert(84%) sepia(3%) saturate(3092%) hue-rotate(313deg) brightness(102%) contrast(100%);
+    filter: invert(94%) sepia(0%) saturate(0%) hue-rotate(202deg) brightness(106%) contrast(105%);
     width: 60%;
-    margin-left: 0.6em;
-    margin-top: 0.7em;
+    margin-left: 0.6rem;
+    margin-top: 0.7%;
 }
 
 .user_name{
     size: 2em;
-    color: #ffcbcb;
+    color: #ffffff;
     text-align: center;
 }
 
-.logout_icon{
-    filter: invert(84%) sepia(3%) saturate(3092%) hue-rotate(313deg) brightness(102%) contrast(100%);
+/* join room icon on the navbar */
+.join_room_icon{
+    filter: invert(94%) sepia(0%) saturate(0%) hue-rotate(202deg) brightness(106%) contrast(105%);
     width: 60%;
-    margin-left: 0.79em;
-    margin-top: 38.3em;
+    margin-left: 0.7rem;
+    margin-top: 5%;
+}
+
+.logout_icon{
+    filter: invert(94%) sepia(0%) saturate(0%) hue-rotate(202deg) brightness(106%) contrast(105%);
+    width: 60%;
+    margin-left: 0.7rem;
+    margin-top: 35em;
+}
+
+@media only screen and (max-width: 875px) {
+    .navbar_left{
+        display: block;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 13%;
+        background-color: black;
+        z-index: 2;
+    }
+
+    .user{
+        margin-top: 3.7em;
+    }
+
+    .logout_icon{
+        margin-top: 50%;
+    }
+    
 }
