@@ -32,9 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.select-room').forEach(p => {
             p.onclick = () => {
                 // remove the menu
-                document.querySelectorAll(".mobile-hide").forEach(p => {
-                    p.style.display="none";
-                });
+                if (window.innerWidth < 875) { 
+                    document.querySelectorAll(".mobile-hide").forEach(p => {
+                        p.style.display="none";
+                    });
+                } 
 
                 //making the input bar visible.
                 document.getElementById("user_message").style.visibility="visible";
