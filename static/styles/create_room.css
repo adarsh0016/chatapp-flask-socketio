@@ -3,6 +3,8 @@
 
 .background_create_room{
     margin: 0;
+    background: rgb(53,53,53);
+    background: linear-gradient(114deg, rgba(53,53,53,1) 0%, rgba(11,11,11,1) 100%);
     height: 100%;
     width: 100%;
     font-family: 'montserrat';
@@ -30,20 +32,22 @@
 .create_room{
     color: #ffffff;
     position: absolute;
-    margin-left: 20%;
     margin-top: 5%;
     padding-top: 5%;
+    width: 50%;
+    text-align: center;
 }
 
 .join_room{
     color: #ffffff;
     position: absolute;
-    margin-left: 53%;
+    width: 50%;
+    margin-left: 50%;
     margin-top: 5%;
     border-left: 0.5px solid #d3deeb;
     height: 80%;
     padding-top: 5%;
-    padding-left: 10%;
+    text-align: center;
 }
 
 .text{
@@ -53,23 +57,78 @@
     -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
+.create_text{
+    text-align: center;
+}
+
+.create_input{
+    position: relative;
+    margin-left: 80%;
+}
+
 .btn-outline-light{
     height: 50px;
     width: 50%;
 }
 
-.create_input{
-    margin-left: 13%;
-}
-
 .create_button{
-    margin-left: 25%;
+    margin: 0 auto;
+    display: block !important;
+    width: 30%;
 }
 
 .join_text{
-    margin-left: 15%;
+    text-align: center;
+}
+
+.join_input{
+    position: relative;
+    margin-left: 80%;
 }
 
 .join_button{
-    margin-left: 24%;
+    margin: 0 auto;
+    display: block !important;
+    width: 30%;
+}
+
+@media only screen and (max-width: 875px){
+
+    .background_create_room{
+        height: 120%;
+    }
+
+    .center_block{
+        margin-left: 10%;
+        margin-top: 5em;
+        padding-bottom: 1em;
+        height: auto;
+    }
+
+    .alert{
+        position: absolute;
+        padding-top: 3em;
+    }
+
+    .create_room{
+        position: relative;
+        width: 100%;
+    }
+
+    .join_room{
+        margin-top: 20%;
+        position: relative;
+        width: 100%;
+        margin-left: 0;
+        border-left: 0;
+    }
+
+    input[type='text']{
+        display: block !important;
+        margin: 0 auto;
+        margin-left: 20%;
+        margin-bottom: 2.5em;
+        width: 90%;
+    }
+
 }

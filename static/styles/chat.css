@@ -209,34 +209,12 @@
         display: none;
     }
 
-    .top_bar{
-        display: block;
-        position: absolute;
-        background-color: rgb(0, 0, 0);
-        top: 0;
-        width: 99.9%;
-        height: 3em;
-        left: 0;
-    }
-
     .transparent-bar{
         background-color: rgba(0, 0, 0, 0.5);
         position: absolute;
         right: 0;
         width: 40%;
         height: 100%;
-    }
-
-    .fa-bars{
-        position: absolute;
-        color: white;
-        z-index: 2;
-        margin-top: 0.9em;
-        margin-left: 0.65em;
-    }
-
-    .fa-bars:hover{
-        cursor: pointer;
     }
 
     #display-message-section {
@@ -271,6 +249,7 @@
     .form-rounded{
         margin-left: 4%!important;
         width: 75% !important;
+        bottom: -1.45em;
     }
 
     .btn-circle{

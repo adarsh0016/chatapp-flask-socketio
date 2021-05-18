@@ -25,8 +25,8 @@
 
      
          <div class="join_room">
+            <p class="text join_text">Join a room:</p>
             <form action = "{{ url_for('create_room') }}" method = "POST">
-               <p class="text join_text">Join a room:</p>
                <div class="input-group input-group-sm mb-3">
                   <p><input type = "text" name = "join_room_name" placeholder="Enter the room name" required="required" class="form-control join_input"/></p>
                </div>
