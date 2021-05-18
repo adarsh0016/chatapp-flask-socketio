@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.send({'msg': document.querySelector('#user_message').value, 'username': username, 'room': room });
         //clear input box
         document.querySelector('#user_message').value = '';
+        document.querySelector('#user_message').focus();
     };
 
         //Room selesction
