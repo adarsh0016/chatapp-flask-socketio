@@ -3,11 +3,6 @@ body{
     margin:0;
 }
 
-.background{
-    background-image: url("../images/back.png");
-    background-size:cover
-}
-
 .navbar_left{
     position: absolute;
     height: 98%;

@@ -11,6 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll(".mobile-hide").forEach(p => {
             p.style.display="none";
         });
+
+    }
+
+    document.querySelector(".transparent-bar").onclick = () =>{
+        document.querySelectorAll(".mobile-hide").forEach(p => {
+            p.style.display="none";
+        });
     }
 
     // Make 'enter' key submit message
