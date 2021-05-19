@@ -12,13 +12,13 @@ from models import *
 
 # configure app
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET') # for heroku server
-#app.secret_key = 'SECRET' # for local server
+#app.secret_key = os.environ.get('SECRET') # for heroku server
+app.secret_key = 'SECRET' # for local server
 
 #configure database
 
-app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
-#app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
+#app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
+app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -42,9 +42,6 @@ def load_user(id):
 # login page
 @app.route("/", methods=['GET', 'POST'])
 def login():
-    global room_name
-
-    room_name = ""  # resetting room_name to none for new users.
 
     login_form = LoginForm()    #flask login
 
@@ -52,7 +49,7 @@ def login():
     if login_form.validate_on_submit():
         user_object = User.query.filter_by(username=login_form.username.data).first()   #returns the user_object (ie. id, username, password) of the clinet from the users table.
         login_user(user_object)     #logins in the session
-        return redirect(url_for('chat'))    #redirecting to the cat page.
+        return redirect(url_for('chat',room_name=""))    #redirecting to the cat page.
 
     return render_template("login.html", form=login_form)   #renders the login page, passing the login_form values as form variable to html.
 
@@ -84,7 +81,6 @@ def signin():
 # Create_room page
 @app.route("/create_room", methods=['GET', 'POST'])
 def create_room():
-    global room_name
 
     # checks if the user is logged in and not just added "/create_room" at the end
     if not current_user.is_authenticated:
@@ -102,14 +98,27 @@ def create_room():
             room_name = request.form['Room_name']   #getting the room entered by the client.
             if room_name not in ROOMS:  #checks if the room already exists or not.
                 ROOMS.append(room_name)
-                return redirect(url_for('chat'))
+                #Adding the room name the user connected to, to the database.
+                room = Rooms(username =current_user.username, room = room_name, userroom = (current_user.username
+                +room_name))
+                db.session.add(room)
+                db.session.commit()
+                db.session.close()
+                return redirect(url_for('chat', room_name = room_name))
             else:   #if the room already exists.
                 flash('Room Already Exists!, try another name.', 'danger')
                 return redirect(url_for('create_room'))
         elif (request.form.get('join_room_name', False)):   #if the client has entered something.
             room_name = request.form['join_room_name']
             if room_name in ROOMS:  #if room already exists.
-                return redirect(url_for('chat'))
+                #Adding the room name the user connected to, to the database.
+                room = Rooms(username =current_user.username, room = room_name, userroom = (current_user.username+room_name))
+                db.session.add(room)
+                db.session.commit()
+                db.session.close()
+
+                # current_user.session['room_name'] = room_name
+                return redirect(url_for('chat', room_name = room_name))
             else:   #if it did'nt.
                 flash('No such room exists, check the room name before entering again!','danger')
                 return redirect(url_for('create_room'))
@@ -119,6 +128,7 @@ def create_room():
 #chat page.
 @app.route("/chat", methods=['GET', 'POST'])
 def chat():
+    room_name = request.args['room_name']
     # checks if the user is logged in and not just added "/chat" at the end
     if not current_user.is_authenticated:
         flash('Please login.', 'danger')
@@ -131,11 +141,9 @@ def chat():
     # creating a list of user_rooms to send to the client.
     for user_room in user_rooms:
         user_rooms_list.append(user_room.room)
-    if room_name not in user_rooms_list:
-        user_rooms_list.append(room_name)
     user_rooms_list.reverse()   #reverse it so that the latest room comes in the top.
 
-    return render_template('chat.html', username=current_user.username, user_rooms_list=user_rooms_list)
+    return render_template('chat.html', username=current_user.username, user_rooms_list=user_rooms_list, room_name=room_name)
 
 #leave_room page
 @app.route("/leave", methods=['GET'])
@@ -146,10 +154,6 @@ def leave_room__():
 #logout page
 @app.route("/logout", methods=['GET'])
 def logout():
-    global room_name
-
-    # resetting it to "". for better understamding peep chat.
-    room_name=""
 
     logout_user()
     flash('You have logged out successfully', 'success')
@@ -168,13 +172,6 @@ def join(data):
 
     send({'name':data['username'], 'msg': data['username'] + " has joined the '" + data['room'] + "' room."}, room=data['room'])
 
-    #Adding the room name the user connected to, to the database.
-    room = Rooms(username = data['username'], room = data['room'], userroom = (data['username']+data['room']))
-    if Rooms.query.filter_by(userroom=(data['username']+data['room'])).first() is None:
-        db.session.add(room)
-        db.session.commit()
-        db.session.close()
-
 #event handler: leave room
 @socketio.on('leave')
 def leave(data):
@@ -184,8 +181,8 @@ def leave(data):
 
 if __name__ == "__main__":
 
-    app.run(debug=True) # for heroku server
-    #socketio.run(app, debug=True)
+    #app.run(debug=True) # for heroku server
+    socketio.run(app, debug=True)
 
 
 

@@ -12,10 +12,8 @@
             <h4 class="rooms_text">Rooms</h4>
                 <nav id="sidebar_rooms">
                     {% for i in user_rooms_list %}
-                        {% if i != "" %}
-                            <h5 class="select-room" id="{{i}}">{{ i }}</h5>
-                            <hr color="white">
-                        {% endif %}
+                        <h5 class="select-room" id="{{i}}">{{ i }}</h5>
+                        <hr color="white">
                     {% endfor %}
                 </nav>
         </div>
@@ -43,7 +41,7 @@
     <!-- get username ans room_name-->
     <script type="text/javascript">
         const username = `{{ username }}`;
-        const room_name = `{{ user_rooms_list[0] }}`;
+        const room_name = `{{ room_name }}`;
         const user_rooms_list = `{{ user_rooms_list }}`
     </script>
 

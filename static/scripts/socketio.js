@@ -61,6 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
         leaveRoom(room_name)
     }
 
+    window.onbeforeunload = function () {
+        socket.emit('leave', {'username': username, 'room': room});
+    }
+
     function print_msg(data,username){
         // Display current message
         if (data.msg) {
