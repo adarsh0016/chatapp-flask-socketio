@@ -12,13 +12,13 @@ from models import *
 
 # configure app
 app = Flask(__name__)
-#app.secret_key = os.environ.get('SECRET') # for heroku server
-app.secret_key = 'SECRET' # for local server
+app.secret_key = os.environ.get('SECRET') # for heroku server
+#app.secret_key = 'SECRET' # for local server
 
 #configure database
 
-#app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
-app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
+app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
+#app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -38,6 +38,7 @@ room_name = ""  #stores the value to current room of the client.
 def load_user(id):
 
     return User.query.get(int(id))  #returns the username and password of the client from users table.
+    db.session.remove()
 
 # login page
 @app.route("/", methods=['GET', 'POST'])
@@ -48,6 +49,7 @@ def login():
     # Allow login if validation success
     if login_form.validate_on_submit():
         user_object = User.query.filter_by(username=login_form.username.data).first()   #returns the user_object (ie. id, username, password) of the clinet from the users table.
+        db.session.remove()
         login_user(user_object)     #logins in the session
         return redirect(url_for('chat',room_name=""))    #redirecting to the cat page.
 
@@ -71,7 +73,7 @@ def signin():
         user = User(username=username, password=hashed_pswd)
         db.session.add(user)
         db.session.commit()
-        db.session.close()
+        db.session.remove()
 
         flash('Registered succesfully. Please login.', 'success')
         return redirect(url_for('login'))   #redireting to the login page.
@@ -89,6 +91,7 @@ def create_room():
 
     ROOMS = []  #initializeing the ROOMS list.
     get_rooms = Rooms.query.filter_by().all()   #getting all the room objects from rooms table.
+    db.session.remove()
     for i in get_rooms:
         if i.room not in ROOMS:
             ROOMS.append(i.room)    #adding all the unique room names to the list to display at the rooms section of the chat page.
@@ -103,7 +106,7 @@ def create_room():
                 +room_name))
                 db.session.add(room)
                 db.session.commit()
-                db.session.close()
+                db.session.remove()
                 return redirect(url_for('chat', room_name = room_name))
             else:   #if the room already exists.
                 flash('Room Already Exists!, try another name.', 'danger')
@@ -115,7 +118,7 @@ def create_room():
                 room = Rooms(username =current_user.username, room = room_name, userroom = (current_user.username+room_name))
                 db.session.add(room)
                 db.session.commit()
-                db.session.close()
+                db.session.remove()
 
                 # current_user.session['room_name'] = room_name
                 return redirect(url_for('chat', room_name = room_name))
@@ -136,6 +139,7 @@ def chat():
     
     #getting all the rooms this user is in from the database.
     user_rooms = Rooms.query.filter_by(username = current_user.username).all()
+    db.session.remove()
     user_rooms_list = []
 
     # creating a list of user_rooms to send to the client.
@@ -181,8 +185,8 @@ def leave(data):
 
 if __name__ == "__main__":
 
-    #app.run(debug=True) # for heroku server
-    socketio.run(app, debug=True)
+    app.run(debug=True) # for heroku server
+    #socketio.run(app, debug=True)
 
 
 
