@@ -17,7 +17,7 @@
             <form action = "{{ url_for('create_room') }}" method = "POST">
                <p class="text create_text">Create Your Own Room:</p>
                <div class="input-group input-group-sm mb-3">
-                  <p><input type = "text" name = "Room_name" placeholder="Enter a name" autocomplete="off" required="required" class="form-control create_input"/></p>
+                  <input type = "text" name = "Room_name" placeholder="Enter a name" autocomplete="off" required="required" class="form-control create_input">
                </div>
                <p><input type = "submit" value="Create" class="btn btn-outline-light create_button"></p>
             </form>
@@ -28,7 +28,7 @@
             <p class="text join_text">Join a room:</p>
             <form action = "{{ url_for('create_room') }}" method = "POST">
                <div class="input-group input-group-sm mb-3">
-                  <p><input type = "text" name = "join_room_name" placeholder="Enter the room name" required="required" class="form-control join_input"/></p>
+                  <input type = "text" name = "join_room_name" placeholder="Enter the room name" required="required" class="form-control join_input">
                </div>
                <p><input type = "submit" value = "Join" class="btn btn-outline-light join_button"></p>
             </form>

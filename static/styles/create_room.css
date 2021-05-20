@@ -34,17 +34,16 @@
     position: absolute;
     margin-top: 5%;
     padding-top: 5%;
-    width: 50%;
+    margin-left: 10%;
+    width: 30%;
     text-align: center;
 }
 
 .join_room{
     color: #ffffff;
-    position: absolute;
-    width: 50%;
-    margin-left: 50%;
+    width: 30%;
+    margin-left: 60%;
     margin-top: 5%;
-    border-left: 0.5px solid #d3deeb;
     height: 80%;
     padding-top: 5%;
     text-align: center;
@@ -53,8 +52,6 @@
 .text{
     font-size: 150%;
     margin-bottom: 4.5em;
-    -webkit-text-stroke-width: 0.5px;
-    -webkit-text-stroke-color: rgb(0, 0, 0);
 }
 
 .create_text{
@@ -62,8 +59,8 @@
 }
 
 .create_input{
-    position: relative;
-    margin-left: 80%;
+    margin: 0 auto;
+    display: block;
 }
 
 .btn-outline-light{
@@ -82,8 +79,8 @@
 }
 
 .join_input{
-    position: relative;
-    margin-left: 80%;
+    margin: 0 auto;
+    display: block;
 }
 
 .join_button{
@@ -99,7 +96,8 @@
     }
 
     .center_block{
-        margin-left: 10%;
+        margin-left: 7%;
+        width: 86%;
         margin-top: 5em;
         padding-bottom: 1em;
         height: auto;
@@ -123,11 +121,13 @@
         border-left: 0;
     }
 
-    input[type='text']{
-        display: block !important;
-        margin: 0 auto;
-        margin-left: 20%;
-        margin-bottom: 2.5em;
+    .create_room{
+        margin-left: 5%;
+        width: 90%;
+    }
+    
+    .join_room{
+        margin-left: 5%;
         width: 90%;
     }
 
