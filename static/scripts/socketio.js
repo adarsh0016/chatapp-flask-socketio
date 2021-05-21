@@ -17,39 +17,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // displays incomming messages
     // Display all incoming messages
     socket.on('message', data => {
-        print_msg(data,username);
+        print_msg_other(data,username);
     });
 
    
     // send message
     document.querySelector('#send_message').onclick = () =>{
-        socket.send({'msg': document.querySelector('#user_message').value, 'username': username, 'room': room });
+        var data = {'msg': document.querySelector('#user_message').value, 'username': username, 'room': room };
+        print_my_msg(data,username);
+        socket.send(data);
         //clear input box
         document.querySelector('#user_message').value = '';
         document.querySelector('#user_message').focus();
     };
 
-        //Room selesction
-        document.querySelectorAll('.select-room').forEach(p => {
-            p.onclick = () => {
-                // remove the menu
-                if (window.innerWidth < 875) { 
-                    document.querySelectorAll(".mobile-hide").forEach(p => {
-                        p.style.display="none";
-                    });
-                } 
+    //Room selesction
+    document.querySelectorAll('.select-room').forEach(p => {
+        p.onclick = () => {
 
-                //making the input bar visible.
-                document.getElementById("user_message").style.visibility="visible";
-                document.getElementById("send_message").style.visibility="visible";
-                let newRoom = p.innerHTML;
-                if (newRoom != room) {
-                    leaveRoom(room);
-                    joinRoom(newRoom);
-                    room = newRoom;
+            socket.on('new_join_history', data => {
+                socket.off('new_join_history');
+                for (var i =0; i<data.length; i++){
+                    print_msg_history(data[i],username);
                 }
-            };
-        });
+            });
+            
+            // remove the menu
+            if (window.innerWidth < 875) { 
+                document.querySelectorAll(".mobile-hide").forEach(p => {
+                    p.style.display="none";
+                });
+            }
+
+            //making the input bar visible.
+            document.getElementById("user_message").style.visibility="visible";
+            document.getElementById("send_message").style.visibility="visible";
+            let newRoom = p.innerHTML;
+            if (newRoom != room) {
+                leaveRoom(room);
+                joinRoom(newRoom);
+                room = newRoom;
+            }
+        };
+    });
 
     //New room button
     document.querySelector('#create_room').onclick = () => {
@@ -65,7 +75,90 @@ document.addEventListener('DOMContentLoaded', () => {
         socket.emit('leave', {'username': username, 'room': room});
     }
 
-    function print_msg(data,username){
+    function print_msg_other(data,username){
+        // Display current message
+        if (data.msg) {
+            const p = document.createElement('p');
+            const span_username = document.createElement('span');
+            const span_timestamp = document.createElement('span');
+            const br = document.createElement('br');
+            // Display other users' messages
+            if (data.username != username){
+                if (typeof data.username !== 'undefined') {
+                    p.setAttribute("class", "others-msg");
+
+                    // Username
+                    span_username.setAttribute("class", "other-username");
+                    span_username.innerText = data.username;
+
+                    // Timestamp
+                    span_timestamp.setAttribute("class", "timestamp");
+                    span_timestamp.innerText = data.time_stamp;
+
+                    // HTML to append
+                    p.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML;
+
+                    //Append
+                    document.querySelector('#display-message-section').append(p);
+                }
+                // Display system message
+                else {
+                    // Checks if other user has joined or its our own msg.
+                    if (data.name != username){
+                        printSysMsg(data.msg);
+                    }
+                }
+            }
+        }
+        scrollDownChatWindow();
+    }
+
+    function print_my_msg(data,username){
+        var d = new Date();
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+        var m = d.getMonth();
+        var date = d.getDate();
+        var hr = d.getHours();
+        var min = d.getMinutes();
+        if (min < 10) {
+            min = "0" + min;
+        }
+        var ampm = "AM";
+        if( hr > 12 ) {
+            hr -= 12;
+            ampm = "PM";
+        }
+        
+        // Display current message
+        if (data.msg) {
+            const p = document.createElement('p');
+            const span_username = document.createElement('span');
+            const span_timestamp = document.createElement('span');
+            const br = document.createElement('br')
+            // Display user's own message
+            if (data.username == username) {
+                    p.setAttribute("class", "my-msg");
+
+                    // Username
+                    span_username.setAttribute("class", "my-username");
+                    span_username.innerText = data.username;
+
+                    // Timestamp
+                    span_timestamp.setAttribute("class", "timestamp");
+                    span_timestamp.innerText = monthNames[m] + "-" + date + " " + hr +":" + min + ampm;
+
+                    // HTML to append
+                    p.innerHTML += span_username.outerHTML + br.outerHTML + data.msg + br.outerHTML + span_timestamp.outerHTML
+
+                    //Append
+                    document.querySelector('#display-message-section').append(p);
+            }
+        }
+        scrollDownChatWindow();
+    }
+
+    function print_msg_history(data,username){
         // Display current message
         if (data.msg) {
             const p = document.createElement('p');
@@ -108,18 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 //Append
                 document.querySelector('#display-message-section').append(p);
             }
-            // Display system message
-            else {
-                // Checks if other user has joined or its our own msg.
-                if (data.name != username){
-                    printSysMsg(data.msg);
-                }
-            }
-
-
         }
         scrollDownChatWindow();
     }
+
 
 
 

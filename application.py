@@ -1,7 +1,7 @@
 import os
 from threading import local
 from time import localtime, strftime
-from flask import Flask, render_template,url_for,redirect, flash, request
+from flask import Flask, render_template,url_for,redirect, flash, jsonify, request
 from flask_login import LoginManager, login_user, current_user, login_required, logout_user
 from flask_socketio import SocketIO, rooms, send, emit, join_room, leave_room
 from werkzeug import debug
@@ -32,6 +32,7 @@ login.init_app(app)
 #Global variables
 ROOMS =[]   #stores the rooms the current client is in.
 room_name = ""  #stores the value to current room of the client.
+PRIVATE_ROOMS=[] #a room for every client specific.
 
 #flask login
 @login.user_loader
@@ -167,20 +168,37 @@ def logout():
 @socketio.on('message')
 def message(data):
 
-    send({'msg': data['msg'], 'username': data['username'], 'time_stamp': strftime('%b-%d %I: %M%p', localtime())}, room =data['room']) #msg={'msg':msg,'username':username}
+    send({'msg': data['msg'], 'username': data['username'], 'time_stamp': strftime('%b-%d %I:%M%p', localtime())}, room =data['room']) #msg={'msg':msg,'username':username}
+
+    msg_history = Msg_history(username =data['username'], room = data['room'], msg = data['msg'], time = strftime('%b-%d %I: %M%p', localtime()))
+    db.session.add(msg_history)
+    db.session.commit()
+    db.session.remove()
 
 #event handler: join room
 @socketio.on('join')
 def join(data):
     join_room(data['room'])
 
+    join_room(data['username'])
+
     send({'name':data['username'], 'msg': data['username'] + " has joined the '" + data['room'] + "' room."}, room=data['room'])
+
+    msg_history_list = []
+
+    msg_history = Msg_history.query.filter_by(room = data['room']).all()
+    db.session.remove()
+    for each_msg in msg_history:
+        msg_history_list.append({'msg': each_msg.msg, 'username': each_msg.username, 'time_stamp': each_msg.time})
+    emit('new_join_history', msg_history_list, room = data['username'])
 
 #event handler: leave room
 @socketio.on('leave')
 def leave(data):
     send({'name': data['username'], 'msg': data['username'] + " has left the '" + data['room'] + "' room."}, room=data['room'])
     leave_room(data['room'])
+
+    leave_room(data['username'])
 
 
 if __name__ == "__main__":
