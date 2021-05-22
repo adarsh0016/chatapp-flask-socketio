@@ -4,6 +4,12 @@
 
 {% block content %}
 
+    <div id="enlarged-img" class="enlarged-img">
+        <i id="close-enlarged-img" class="fas fa-arrow-left fa-lg"></i>
+        <img id="open_img" class="open_img">
+        <i id="download-enlarged-image" class="fas fa-cloud-download-alt fa-lg"></i>
+    </div>
+    <p class="chat-img" id="hide"></p>
     <div id="main-section">
         <!--room selection-->
         <div class="transparent-bar mobile-hide"></div>
@@ -30,7 +36,14 @@
 
                 <!--input message-->
                 <div>
+                    <div class="selected_img" id="selected_img">
+                        <p id="image_preview"><img id="img_output" width="200"></p>
+                    </div>
                     <input type="text" id="user_message" placeholder="Type here.." autocomplete="off" class="form-control form-rounded" maxlength="150">
+                    <label for="img_upload" class="custom-img-upload">
+                        <i class="fas fa-lg fa-file-image" id="send_image"></i>
+                    </label>
+                    <input id="img_upload" type="file" accept="image/*"/>
                     <button class="btn btn-circle" type="button" id="send_message"><i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>

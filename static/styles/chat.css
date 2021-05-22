@@ -2,6 +2,10 @@
     display: none !important;
 }
 
+#hide{
+    display: none;
+}
+
 .transparent-bar{
     display: none;
 }
@@ -58,6 +62,37 @@
     cursor: pointer !important;
 }
 
+.selected_img{
+    display: none;
+    position: absolute;
+    background-color: black;
+    color: white;
+    font-family: montserrat;
+    border-color: rgb(255, 255, 255);
+    border-width: 1px;
+    border-style: solid;
+    margin-left: 7%;
+    width: 70%;
+    bottom: 4rem;
+    border-radius: 25px;
+}
+
+#img_output{
+    margin: 1em;
+}
+
+.fa-file-image{
+    position: absolute;
+    bottom: 1.25em;
+    color: rgb(0, 0, 0);
+    right: 24%;
+}
+
+.fa-file-image:hover{
+    cursor: pointer;
+    color: rgb(97, 58, 58);
+}
+
 /* rounded input box */
 .form-rounded {
     position: absolute;
@@ -65,6 +100,7 @@
     width: 70% !important;
     margin-left: 7%;
     bottom: 1rem;
+    padding-right: 3em !important;
 }
 
 /* send button */
@@ -105,6 +141,78 @@
     min-height: 90%;
     max-height: 90%;
     overflow-y: auto; /*Make  this section scrolable */
+}
+
+.my-img{
+    margin-left: 55%;
+    max-width: 25em;
+    background-color: #383838;
+    color: white;
+    font-family: montserrat;
+    border-color: rgb(101, 102, 40);
+    border-width: 1px;
+    border-style: solid;
+    word-wrap: break-word;
+}
+
+.other-img{
+    margin-left: 8%;
+    max-width: 25em;
+    background-color: #383838;
+    color: white;
+    font-family: montserrat;
+    border-color: rgb(52, 89, 114);
+    border-width: 1px;
+    border-style: solid;
+    word-wrap: break-word;
+}
+
+.chat-img{
+    width: 24.9em;
+}
+
+.enlarged-img{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.795);
+    z-index: 2;
+}
+
+.open_img{
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.fa-arrow-left{
+    position: absolute;
+    color: white;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+.fa-cloud-download-alt{
+    position: absolute;
+    color: white;
+    right: 1em;
+    bottom: 1em;
+}
+
+.fa-arrow-left:hover{
+    cursor: pointer;
+}
+
+.fa-cloud-download-alt{
+    cursor: pointer;
 }
 
 .others-msg {
@@ -204,6 +312,10 @@
     scrollbar-width: none;  /* Firefox */
   }
 
+  input[type="file"] {
+    display: none;
+  }
+
 @media only screen and (max-width: 875px){
     .show-mobile{
         display: block !important;
@@ -232,11 +344,30 @@
         z-index: 2;
     }
 
+    .my-img{
+        right: 0;
+        margin-right: 5%;
+        max-width: 30em;
+        margin-left: 15%;
+    }
+
+    .other-img{
+        right: 0;
+        margin-left: 5%;
+        max-width: 30em;
+        margin-right: 15%;
+    }
+
     .my-msg{
         right: 0;
         margin-right: 5%;
         max-width: 30em;
         margin-left: 15%;
+    }
+
+    .chat-img{
+        max-width:100%;
+        height:auto;
     }
 
     .others-msg{
@@ -250,10 +381,22 @@
         max-width: 60%;
     }
 
+    .selected_img{
+        margin-left: 4%;
+        width: 75%;
+        bottom: 4em;
+    }
+
     .form-rounded{
         margin-left: 4%!important;
         width: 75% !important;
         bottom: 1em;
+    }
+
+    .fa-file-image{
+        position: absolute;
+        bottom: 1.25em;
+        right: 24%;
     }
 
     .btn-circle{

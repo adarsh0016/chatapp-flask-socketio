@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         document.getElementById("user_message").style.visibility="hidden";
         document.getElementById("send_message").style.visibility="hidden";
+        document.getElementById("send_image").style.visibility="hidden";
         msg = "Select a room and start chating!";
         printSysMsg(msg);
     }
@@ -20,12 +21,42 @@ document.addEventListener('DOMContentLoaded', () => {
         print_msg_other(data,username);
     });
 
+    socket.on('img', img_data => {
+        if (img_data['username'] != username){
+            printOtherImg(img_data['img'],img_data['username']);
+        }
+    });
    
     // send message
     document.querySelector('#send_message').onclick = () =>{
-        var data = {'msg': document.querySelector('#user_message').value, 'username': username, 'room': room };
-        print_my_msg(data,username);
-        socket.send(data);
+        if (document.querySelector('#user_message').value != ""){
+            var data = {'msg': document.querySelector('#user_message').value, 'username': username, 'room': room };
+            print_my_msg(data,username);
+            socket.send(data);
+        }
+
+        // console.log(document.getElementById('img_upload').files[0]);
+        var imgSelected = document.getElementById("img_upload").files;
+        if (imgSelected.length > 0){
+            var fileToLoad = imgSelected[0];
+
+            var fileReader = new FileReader();
+
+            fileReader.onload = function(fileLoadedEvent) {
+                var img_src = fileLoadedEvent.target.result;
+
+                var img_data = {'img': img_src, 'username':username, 'room':room };
+                printMyImg(img_src, username);
+                socket.emit('img', img_data);
+            }
+            fileReader.readAsDataURL(fileToLoad);
+        }
+
+        document.getElementById('img_upload').value = "";
+        var image = document.getElementById('img_output');
+        image.style.display = "none";
+        document.querySelector(".selected_img").style.display="none";
+
         //clear input box
         document.querySelector('#user_message').value = '';
         document.querySelector('#user_message').focus();
@@ -52,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             //making the input bar visible.
             document.getElementById("user_message").style.visibility="visible";
             document.getElementById("send_message").style.visibility="visible";
+            document.getElementById("send_image").style.visibility="visible";
             let newRoom = p.innerHTML;
             if (newRoom != room) {
                 leaveRoom(room);
@@ -158,6 +190,72 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollDownChatWindow();
     }
 
+    function printMyImg(img_src,username){
+        if (img_src) {
+            const p = document.createElement('p');
+            const span_username = document.createElement('span');
+            const chat_img = document.createElement('img');
+            const br = document.createElement('br')
+            // Display user's own img
+                p.setAttribute("class", "my-img");
+                chat_img.setAttribute("class", "chat-img");
+                chat_img.src = img_src;
+
+                // Username
+                span_username.setAttribute("class", "my-username");
+                span_username.innerText = username;
+
+                // HTML to append
+                p.innerHTML += span_username.outerHTML + br.outerHTML + chat_img.outerHTML;
+
+                //Append
+                document.querySelector('#display-message-section').append(p);
+
+                //open image
+                document.querySelectorAll('.chat-img').forEach(p => {
+                    p.onclick = () => {
+                        document.querySelector(".enlarged-img").style.display = "block";
+                        var img_src = p.src;
+                        document.querySelector("#open_img").src = img_src;
+                    }
+                });
+        }
+        scrollDownChatWindow();
+    }
+
+    function printOtherImg(img_src,username){
+        if (img_src) {
+            const p = document.createElement('p');
+            const span_username = document.createElement('span');
+            const chat_img = document.createElement('img');
+            const br = document.createElement('br')
+            // Display other user's img
+                p.setAttribute("class", "other-img");
+                chat_img.setAttribute("class", "chat-img");
+                chat_img.src = img_src;
+
+                // Username
+                span_username.setAttribute("class", "other-username");
+                span_username.innerText = username;
+
+                // HTML to append
+                p.innerHTML += span_username.outerHTML + br.outerHTML + chat_img.outerHTML;
+
+                //Append
+                document.querySelector('#display-message-section').append(p);
+
+                //open image
+                document.querySelectorAll('.chat-img').forEach(p => {
+                    p.onclick = () => {
+                        document.querySelector(".enlarged-img").style.display = "block";
+                        var img_src = p.src;
+                        document.querySelector("#open_img").src = img_src;
+                    }
+                });
+        }
+        scrollDownChatWindow();
+    }
+
     function print_msg_history(data,username){
         // Display current message
         if (data.msg) {
@@ -258,5 +356,3 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector("#user_message").focus();
     }
 });
-
-//38
