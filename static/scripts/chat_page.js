@@ -13,17 +13,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     }
-
+    //the right portion of side menu, when clicked the side menu is closed
     document.querySelector(".transparent-bar").onclick = () =>{
         document.querySelectorAll(".mobile-hide").forEach(p => {
             p.style.display="none";
         });
     }
-
+    //image icon when clicked an image preview is shown
     document.querySelector("#send_image").onclick = () =>{
         document.querySelector(".selected_img").style.display="block";
     }
-
+    //when a file is selected it is shown in the preview
     const fileSelector = document.getElementById('img_upload');
     fileSelector.addEventListener('change', (event) => {
         const fileList = event.target.files;
@@ -41,6 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    //cancel image button
+    document.querySelector('#cancel-img').onclick = () =>{
+        document.getElementById('img_upload').value = "";
+        var image = document.getElementById('img_output');
+        image.style.display = "none";
+        document.querySelector(".selected_img").style.display="none";
+    }
+
+    //download button
     document.querySelector('#download-enlarged-image').onclick = () =>{
         var img = document.querySelector("#open_img");
         var a = document.createElement("a"); //Create <a>
@@ -48,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
         a.download = "Image.jpg"; //File name Here
         a.click(); //Downloaded file
     }
-
+    //close button on image view
     document.querySelector('#close-enlarged-img').onclick = () =>{
         document.querySelector("#enlarged-img").style.display = "none";
     }

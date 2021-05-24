@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             socket.send(data);
         }
 
-        // console.log(document.getElementById('img_upload').files[0]);
+        // converting the image into base24
         var imgSelected = document.getElementById("img_upload").files;
         if (imgSelected.length > 0){
             var fileToLoad = imgSelected[0];
@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 var img_src = fileLoadedEvent.target.result;
 
                 var img_data = {'img': img_src, 'username':username, 'room':room };
-                printMyImg(img_src, username);
-                socket.emit('img', img_data);
+                printMyImg(img_src, username);  //print my sent image
+                socket.emit('img', img_data);   // send the image to the server
             }
             fileReader.readAsDataURL(fileToLoad);
         }
-
+        //when the send button the image preview is set to be hidden
         document.getElementById('img_upload').value = "";
         var image = document.getElementById('img_output');
         image.style.display = "none";
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //Room selesction
     document.querySelectorAll('.select-room').forEach(p => {
         p.onclick = () => {
-
+            //gets msg history from the databse(server) and displays when the user joins a new room
             socket.on('new_join_history', data => {
                 socket.off('new_join_history');
                 for (var i =0; i<data.length; i++){
@@ -102,11 +102,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#logout_button').onclick = () => {
         leaveRoom(room_name)
     }
-
+    //sends a logout message when the user refreshed or coses the tab
     window.onbeforeunload = function () {
         socket.emit('leave', {'username': username, 'room': room});
     }
-
+    //print other messags
     function print_msg_other(data,username){
         // Display current message
         if (data.msg) {
@@ -144,8 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         scrollDownChatWindow();
     }
-
+    //prints users message
     function print_my_msg(data,username){
+        // time
         var d = new Date();
         const monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"];
@@ -189,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         scrollDownChatWindow();
     }
-
+    //print users message
     function printMyImg(img_src,username){
         if (img_src) {
             const p = document.createElement('p');
@@ -222,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         scrollDownChatWindow();
     }
-
+    //print others sent image
     function printOtherImg(img_src,username){
         if (img_src) {
             const p = document.createElement('p');
@@ -255,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         scrollDownChatWindow();
     }
-
+    //print the message history
     function print_msg_history(data,username){
         // Display current message
         if (data.msg) {
@@ -303,9 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
         scrollDownChatWindow();
     }
 
-
-
-
     //Leave room
     function leaveRoom(room){
         socket.emit('leave', {'username': username, 'room': room});
@@ -337,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         //printing you joined the room
         printSysMsg("You joined the '" + room + "' room.")
     }
-        
+
     // Scroll chat window down
     function scrollDownChatWindow() {
         const chatWindow = document.querySelector("#display-message-section");

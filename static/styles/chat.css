@@ -1,5 +1,5 @@
 .show-mobile{
-    display: none !important;
+    display: none;
 }
 
 #hide{
@@ -74,11 +74,23 @@
     margin-left: 7%;
     width: 70%;
     bottom: 4rem;
+    min-height: 3em;
     border-radius: 25px;
 }
 
 #img_output{
     margin: 1em;
+    width: 500px;
+}
+
+.fa-times-circle{
+    position: absolute;
+    top: 0.5em;
+    right: 0.4em;
+}
+
+.fa-times-circle:hover{
+    cursor: pointer;
 }
 
 .fa-file-image{
@@ -318,7 +330,7 @@
 
 @media only screen and (max-width: 875px){
     .show-mobile{
-        display: block !important;
+        display: block;
     }
 
     .mobile-hide{
@@ -385,6 +397,10 @@
         margin-left: 4%;
         width: 75%;
         bottom: 4em;
+    }
+
+    #img_output{
+        width: 200px;
     }
 
     .form-rounded{
