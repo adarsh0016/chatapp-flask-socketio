@@ -1,5 +1,5 @@
 .show-mobile{
-    display: none;
+    display: none !important;
 }
 
 #hide{
@@ -330,7 +330,7 @@
 
 @media only screen and (max-width: 875px){
     .show-mobile{
-        display: block;
+        display: block !important;
     }
 
     .mobile-hide{

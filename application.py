@@ -1,4 +1,5 @@
 import os
+from googletrans import Translator
 from threading import local
 from time import localtime, strftime
 from flask import Flask, render_template,url_for,redirect, flash, jsonify, request
@@ -12,13 +13,13 @@ from models import *
 
 # configure app
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET') # for heroku server
-#app.secret_key = 'SECRET' # for local server
+#app.secret_key = os.environ.get('SECRET') # for heroku server
+app.secret_key = 'SECRET' # for local server
 
 #configure database
 
-app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
-#app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
+#app.config['SQLALCHEMY_DATABASE_URI']=os.environ.get('DATABASE') # for heroku server
+app.config['SQLALCHEMY_DATABASE_URI']="postgresql://pqnykeyalyyirw:398593ffcfb96cf52bba2798cc1ed720222ed74cd5edcdcc7a7a37e1da7fc204@ec2-52-23-45-36.compute-1.amazonaws.com:5432/dam6i6c7a0u5i4" # for local server
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -32,6 +33,11 @@ login.init_app(app)
 #Global variables
 ROOMS =[]   #stores the rooms the current client is in.
 room_name = ""  #stores the value to current room of the client.
+
+#language list
+l={'afrikaans': 'af', 'irish': 'ga', 'albanian': 'sq', 'italian': 'it', 'arabic': 'ar', 'japanese': 'ja', 'azerbaijani': 'az', 'kannada': 'kn', 'basque': 'eu', 'korean': 'ko', 'bengali': 'bn', 'latin': 'la', 'belarusian': 'be', 'latvian': 'lv', 'bulgarian': 'bg', 'lithuanian': 'lt', 'catalan': 'ca', 'macedonian': 'mk', 'chinese(simplified)': 'zh-CN', 'malay': 'ms', 'chinese(traditional)': 'zh-TW', 'maltese': 'mt', 'croatian': 'hr', 'norwegian': 'no', 'czech': 'cs', 'persian': 'fa', 'danish': 'da', 
+'polish': 'pl', 'dutch': 'nl', 'portuguese': 'pt', 'english': 'en', 'romanian': 'ro', 'esperanto': 'eo', 'russian': 'ru', 'estonian': 'et', 'serbian': 'sr', 'filipino': 'tl', 'slovak': 'sk', 'finnish': 'fi', 'slovenian': 'sl', 'french': 'fr', 'spanish': 'es', 'galician': 'gl', 'swahili': 'sw', 'georgian': 'ka', 'swedish': 'sv', 'german': 'de', 'tamil': 'ta', 'greek': 'el', 'telugu': 'te', 'gujarati': 'gu', 'thai': 'th', 'haitian': 'ht', 'turkish': 'tr', 'hebrew': 'iw', 'ukrainian': 'uk', 'hindi': 'hi', 'urdu': 'ur', 'hungarian': 'hu', 'vietnamese': 'vi', 'icelandic': 'is', 'welsh': 'cy', 'indonesian': 'id'}
+
 
 #flask login
 @login.user_loader
@@ -166,6 +172,18 @@ def logout():
 #event handler (socketIO): takes the msg and adds time.
 @socketio.on('message')
 def message(data):
+    if data['msg'][0:10].lower() == "/translate":
+        data_tr = data['msg'].split(":")
+
+        if len(data_tr) == 3:
+            if data_tr[1].lower() in l:
+                dest = l[data_tr[1]]
+            else:
+                dest = 'en'
+            data['msg'] = Translator().translate(data_tr[2], dest=dest).text
+        else:
+            dest = 'en'
+            data['msg'] = Translator().translate(data_tr[1], dest=dest).text
 
     send({'msg': data['msg'], 'username': data['username'], 'time_stamp': strftime('%b-%d %I:%M%p', localtime())}, room =data['room']) #msg={'msg':msg,'username':username}
 
@@ -211,8 +229,8 @@ def leave(data):
 
 if __name__ == "__main__":
 
-    app.run(debug=True) # for heroku server
-    #socketio.run(app, debug=True)
+    #app.run(debug=True) # for heroku server
+    socketio.run(app, debug=True)
 
 
 
